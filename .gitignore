@@ -1,3 +1,5 @@
 .idea
 output.css
 node_modules
+.env
+/vendor/
