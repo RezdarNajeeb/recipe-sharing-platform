@@ -16,4 +16,8 @@ $db = new Database();
 
 $results = $db->query('SELECT * FROM users where id=1')->findOrFail();
 
-dd($results);
+if ($_SERVER['REQUEST_URI'] === '/register') {
+    require basePath('resources/views/registration/create.php');
+} elseif ($_SERVER['REQUEST_URI'] === '/') {
+    require basePath('resources/views/index.view.php');
+}

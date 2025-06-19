@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Register</title>
-    <link href="../css/output.css" rel="stylesheet" />
+    <link href="../../css/output.css" rel="stylesheet" />
 </head>
 <body class="h-full">
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
