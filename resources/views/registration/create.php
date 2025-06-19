@@ -1,12 +1,9 @@
-<!doctype html>
-<html lang="en" class="h-full bg-white">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register</title>
-    <link href="../../css/output.css" rel="stylesheet" />
-</head>
-<body class="h-full">
+<?php
+    require basePath('resources/views/partials/header.view.php');
+    require basePath('resources/views/partials/nav.view.php');
+    require basePath('resources/views/partials/banner.view.php');
+?>
+
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
         <img class="mx-auto h-10 w-auto" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
@@ -45,5 +42,7 @@
         </p>
     </div>
 </div>
-</body>
-</html>
+
+<?php
+    require basePath('resources/views/partials/footer.view.php');
+?>

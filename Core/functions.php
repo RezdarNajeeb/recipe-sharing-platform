@@ -18,3 +18,8 @@ function abort()
 {
 
 }
+
+function urlIs($url): bool
+{
+    return $_SERVER['REQUEST_URI'] === $url;
+}
