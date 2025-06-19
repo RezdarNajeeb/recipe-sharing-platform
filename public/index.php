@@ -16,12 +16,14 @@ $db = new Database();
 
 $results = $db->query('SELECT * FROM users where id=1')->findOrFail();
 
-if ($_SERVER['REQUEST_URI'] === '/register') {
-    return view('registration/create', [
-        'heading' => 'Register'
-    ]);
-} elseif ($_SERVER['REQUEST_URI'] === '/') {
-    return view('index', [
-        'heading' => 'Home'
-    ]);
+$url = parse_url($_SERVER['REQUEST_URI'])['path'];
+
+$routes = [
+    '/' => 'controllers/index.php',
+    '/register' => 'controllers/registration/create.php'
+];
+
+if (!array_key_exists($url, $routes)) {
+    abort();
 }
+require basePath($routes[$url]);
