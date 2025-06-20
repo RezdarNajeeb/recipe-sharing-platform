@@ -23,6 +23,11 @@ class Router
         $this->add($url, $controller, 'PUT');
     }
 
+    public function delete(string $url, array $controller): void
+    {
+        $this->add($url, $controller, 'DELETE');
+    }
+
     public function add(string $url, array $controller, string $method): void
     {
         extract($controller);

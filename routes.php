@@ -11,3 +11,4 @@ $router->get('/books/create', [BookController::class => 'create']);
 $router->post('/books', [BookController::class => 'store']);
 $router->get('/books/edit', [BookController::class => 'edit']);
 $router->put('/books', [BookController::class => 'update']);
+$router->delete('/books', [BookController::class => 'destroy']);

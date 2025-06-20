@@ -47,7 +47,7 @@ class Model
         return $result;
     }
 
-    public static function create(array $fields): bool|null
+    public static function create(array $fields): bool
     {
         $columns = self::getColumns($fields);
         $wilds = self::getWilds();
@@ -55,7 +55,7 @@ class Model
         return static::query("INSERT INTO " . static::$table . " ($columns) VALUES($wilds)", array_values($fields));
     }
 
-    public static function update(array $fields): bool|null
+    public static function update(array $fields): bool
     {
         // col1 = val1, col2 = val2
         $columns = str_replace(',', '=?,', static::getColumns($fields));
@@ -63,12 +63,17 @@ class Model
         return static::query("UPDATE " . static::$table . " SET $columns=? WHERE id=?", array_values($fields));
     }
 
+    public static function destroy(int $id): bool
+    {
+        return static::query("DELETE FROM " . static::$table . " WHERE id=?", [$id]);
+    }
+
     private static function getColumns(array $fields): string
     {
         return implode(',', array_keys($fields));
     }
 
-    public static function getWilds(): string
+    private static function getWilds(): string
     {
         return substr(str_repeat('?,', count($_REQUEST)), 0, (count($_REQUEST) * 2) - 1);
     }
