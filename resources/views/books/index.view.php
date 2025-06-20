@@ -6,13 +6,15 @@
 
 <main>
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <ul>
+        <ul class="mb-10">
             <?php foreach($books as $book) : ?>
                 <li class="list-disc">
                     <?= $book['title_en'] ?>
                 </li>
             <?php endforeach; ?>
         </ul>
+
+        <a href="/books/create" class="text-blue-500 hover:underline">Add</a>
     </div>
 </main>
 

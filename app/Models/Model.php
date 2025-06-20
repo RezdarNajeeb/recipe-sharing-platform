@@ -15,13 +15,11 @@ class Model
         //
     }
 
-    public static function query(string $query, array $params = []): Model
+    public static function query(string $query, array $params = []): bool
     {
         static::$statement = new Database()::$pdo->prepare($query);
 
-        static::$statement->execute($params);
-
-        return new static;
+        return static::$statement->execute($params);
     }
 
     public static function all(): array
@@ -47,5 +45,23 @@ class Model
         }
 
         return $result;
+    }
+
+    public static function create(array $attributes): bool|null
+    {
+        $columns = self::getColumns();
+        $wilds = self::getWilds();
+
+        return static::query("INSERT INTO " . static::$table . " ($columns) VALUES($wilds)", $attributes);
+    }
+
+    private static function getColumns(): string
+    {
+        return implode(',', array_keys($_REQUEST));
+    }
+
+    public static function getWilds(): string
+    {
+        return substr(str_repeat('?,', count($_REQUEST)), 0, (count($_REQUEST) * 2) - 1);
     }
 }

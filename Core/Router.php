@@ -14,6 +14,11 @@ class Router
         $this->add($url, $controller, 'GET');
     }
 
+    public function post(string $url, array $controller): void
+    {
+        $this->add($url, $controller, 'POST');
+    }
+
     public function add(string $url, array $controller, string $method): void
     {
         extract($controller);
