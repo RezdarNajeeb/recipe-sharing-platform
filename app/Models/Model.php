@@ -33,7 +33,12 @@ class Model
         static::query("SELECT * FROM " . static::$table . " WHERE id=:id", [
             'id' => $id
         ]);
-        return static::$statement->fetch();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            return static::$statement->fetch();
+        }
+
+        return new static();
     }
 
     public static function findOrFail(int $id): mixed
@@ -55,17 +60,19 @@ class Model
         return static::query("INSERT INTO " . static::$table . " ($columns) VALUES($wilds)", array_values($fields));
     }
 
-    public static function update(array $fields): bool
+    public function update(array $fields): bool
     {
         // col1 = val1, col2 = val2
         $columns = str_replace(',', '=?,', static::getColumns($fields));
 
+        $fields['id'] = $_POST['id'];
+
         return static::query("UPDATE " . static::$table . " SET $columns=? WHERE id=?", array_values($fields));
     }
 
-    public static function destroy(int $id): bool
+    public function destroy(): bool
     {
-        return static::query("DELETE FROM " . static::$table . " WHERE id=?", [$id]);
+        return static::query("DELETE FROM " . static::$table . " WHERE id=?", [$_POST['id']]);
     }
 
     private static function getColumns(array $fields): string

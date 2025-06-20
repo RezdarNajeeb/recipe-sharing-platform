@@ -39,18 +39,22 @@ class Router
         ];
     }
 
-    #[NoReturn] public function route(string $url, string $method): void
+    public function route(string $url, string $method): void
     {
         foreach ($this->routes as $route) {
             if ($route['url'] === $url && $route['method'] === strtoupper($method)) {
                 $class = key($route['controller']);
                 $func = $route['controller'][$class];
-
                 new $class()->$func();
 
                 return;
             }
         }
         abort();
+    }
+
+    public function previousUrl()
+    {
+        return $_SERVER['HTTP_REFERER'];
     }
 }

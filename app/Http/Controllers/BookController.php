@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Forms\BookForm;
 use App\Models\Book;
+use Core\Validator;
+use Exception;
 
 class BookController
 {
@@ -33,19 +36,18 @@ class BookController
 
     public function store(): void
     {
-        $fields = [
+        $fields = BookForm::validate([
             'title_en' => $_POST['title_en'],
             'title_ckb' => $_POST['title_ckb'],
             'description_en' => $_POST['description_en'],
             'description_ckb' => $_POST['description_ckb'],
-        ];
+        ]);
 
         if (Book::create($fields)) {
-            header("location: /book?id={$_POST['id']}");
-            exit();
+            redirect('/books');
         }
 
-        header('location: /');
+        redirect('/');
     }
 
     public function edit(): void
@@ -61,29 +63,35 @@ class BookController
     public function update(): void
     {
         $id = $_POST['id'];
-        $fields = [
+
+        $fields = BookForm::validate([
             'title_en' => $_POST['title_en'],
             'title_ckb' => $_POST['title_ckb'],
             'description_en' => $_POST['description_en'],
             'description_ckb' => $_POST['description_ckb'],
-            'id' => $id
-        ];
+        ]);
 
-        if (Book::update($fields)) {
+        $book = Book::findOrFail($id);
+
+        if ($book->update($fields)) {
             header("location: /book?id=$id");
             exit();
         }
 
         header('location: /');
+        exit();
     }
 
-    public function destroy()
+    public function destroy(): void
     {
-        if (Book::destroy($_POST['id'])) {
+        $book = Book::findOrFail($_POST['id']);
+
+        if ($book->destroy()) {
             header('location: /books');
             exit();
         }
 
         header('location: /');
+        exit();
     }
 }

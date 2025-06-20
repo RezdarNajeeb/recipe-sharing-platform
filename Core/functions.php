@@ -1,5 +1,6 @@
 <?php
 
+use Core\Session;
 use JetBrains\PhpStorm\NoReturn;
 
 function basePath(string $path): string
@@ -36,7 +37,13 @@ function view(string $path, array $attributes = []): void
     require basePath('resources/views/').$path.'.view.php';
 }
 
-function getMethod(): string
+function redirect(string $path): void
 {
-    return $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
+    header("location: $path");
+    exit();
+}
+
+function old(string $field, string $default = ''): string
+{
+    return Session::get('old', true)[$field] ?? $default;
 }
