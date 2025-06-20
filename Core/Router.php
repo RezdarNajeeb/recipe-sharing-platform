@@ -2,22 +2,25 @@
 
 namespace Core;
 
+use App\Http\Controllers\BookController;
 use JetBrains\PhpStorm\NoReturn;
 
 class Router
 {
     public array $routes = [];
 
-    public function get(string $url, string $controller): void
+    public function get(string $url, array $controller): void
     {
         $this->add($url, $controller, 'GET');
     }
 
-    public function add(string $url, string $controller, string $method): void
+    public function add(string $url, array $controller, string $method): void
     {
+        extract($controller);
+
         $this->routes[] = [
             'url' => $url,
-            'controller' => "controllers/$controller",
+            'controller' => $controller,
             'method' => $method
         ];
     }
@@ -26,7 +29,11 @@ class Router
     {
         foreach ($this->routes as $route) {
             if ($route['url'] === $url && $route['method'] === strtoupper($method)) {
-                require basePath($route['controller']);
+                $class = key($route['controller']);
+                $func = $route['controller'][$class];
+
+                new $class()->$func();
+
                 return;
             }
         }

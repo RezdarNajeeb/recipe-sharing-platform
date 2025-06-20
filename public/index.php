@@ -6,10 +6,8 @@ require BASE_PATH.'vendor/autoload.php';
 
 require BASE_PATH.'Core/functions.php';
 
-use Core\Database;
 use Core\Router;
 use Dotenv\Dotenv;
-use Models\Model;
 
 $dotenv = Dotenv::createImmutable(BASE_PATH);
 $dotenv->safeLoad();
@@ -21,3 +19,4 @@ $router = new Router();
 require basePath('routes.php');
 
 $router->route($url, 'GET');
+
