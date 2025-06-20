@@ -1,5 +1,5 @@
 <?php
 
-return view('registration/create', [
+view('registration/create', [
     'heading' => 'Register'
 ]);

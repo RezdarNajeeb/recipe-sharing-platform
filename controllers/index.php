@@ -1,5 +1,5 @@
 <?php
 
-return view('index', [
+view('index', [
     'heading' => 'Home'
 ]);

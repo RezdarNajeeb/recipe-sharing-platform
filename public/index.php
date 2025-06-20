@@ -9,13 +9,10 @@ require BASE_PATH.'Core/functions.php';
 use Core\Database;
 use Core\Router;
 use Dotenv\Dotenv;
+use Models\Model;
 
 $dotenv = Dotenv::createImmutable(BASE_PATH);
 $dotenv->safeLoad();
-
-$db = new Database();
-
-$results = $db->query('SELECT * FROM users where id=1')->findOrFail();
 
 $url = parse_url($_SERVER['REQUEST_URI'])['path'];
 
