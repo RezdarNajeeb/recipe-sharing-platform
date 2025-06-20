@@ -18,5 +18,5 @@ $router = new Router();
 
 require basePath('routes.php');
 
-$router->route($url, $_SERVER['REQUEST_METHOD']);
+$router->route($url, getMethod());
 

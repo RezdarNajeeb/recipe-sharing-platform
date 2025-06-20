@@ -35,3 +35,8 @@ function view(string $path, array $attributes = []): void
     extract($attributes);
     require basePath('resources/views/').$path.'.view.php';
 }
+
+function getMethod(): string
+{
+    return $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
+}

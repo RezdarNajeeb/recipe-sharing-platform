@@ -2,7 +2,6 @@
 
 namespace Core;
 
-use App\Http\Controllers\BookController;
 use JetBrains\PhpStorm\NoReturn;
 
 class Router
@@ -17,6 +16,11 @@ class Router
     public function post(string $url, array $controller): void
     {
         $this->add($url, $controller, 'POST');
+    }
+
+    public function put(string $url, array $controller): void
+    {
+        $this->add($url, $controller, 'PUT');
     }
 
     public function add(string $url, array $controller, string $method): void

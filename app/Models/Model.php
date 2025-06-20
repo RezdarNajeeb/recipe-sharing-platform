@@ -47,17 +47,25 @@ class Model
         return $result;
     }
 
-    public static function create(array $attributes): bool|null
+    public static function create(array $fields): bool|null
     {
-        $columns = self::getColumns();
+        $columns = self::getColumns($fields);
         $wilds = self::getWilds();
 
-        return static::query("INSERT INTO " . static::$table . " ($columns) VALUES($wilds)", $attributes);
+        return static::query("INSERT INTO " . static::$table . " ($columns) VALUES($wilds)", array_values($fields));
     }
 
-    private static function getColumns(): string
+    public static function update(array $fields): bool|null
     {
-        return implode(',', array_keys($_REQUEST));
+        // col1 = val1, col2 = val2
+        $columns = str_replace(',', '=?,', static::getColumns($fields));
+
+        return static::query("UPDATE " . static::$table . " SET $columns=? WHERE id=?", array_values($fields));
+    }
+
+    private static function getColumns(array $fields): string
+    {
+        return implode(',', array_keys($fields));
     }
 
     public static function getWilds(): string
