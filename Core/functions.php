@@ -1,11 +1,13 @@
 <?php
 
+use JetBrains\PhpStorm\NoReturn;
+
 function basePath(string $path): string
 {
     return __DIR__."/../$path";
 }
 
-function dd($value): void
+#[NoReturn] function dd($value): void
 {
     echo '<pre>';
     print_r($value);
@@ -14,11 +16,13 @@ function dd($value): void
     die();
 }
 
-function abort(int $status = 404): string
+#[NoReturn] function abort(int $status = 404): void
 {
     http_response_code(404);
 
-    return view("errors/$status");
+    view("errors/$status");
+
+    die();
 }
 
 function urlIs(string $url): bool
@@ -26,7 +30,7 @@ function urlIs(string $url): bool
     return $_SERVER['REQUEST_URI'] === $url;
 }
 
-function view(string $path, array $attributes = []): string
+function view(string $path, array $attributes = []): void
 {
     extract($attributes);
     require basePath('resources/views/').$path.'.view.php';
