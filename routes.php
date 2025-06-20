@@ -8,4 +8,4 @@ $router->get('/', [Controller::class => 'index']);
 $router->get('/books', [BookController::class => 'index']);
 $router->get('/books/create', [BookController::class => 'create']);
 $router->post('/books', [BookController::class => 'store']);
-
+$router->get("/book", [BookController::class => 'show']);

@@ -14,6 +14,16 @@ class BookController
         ]);
     }
 
+    public function show(): void
+    {
+        $book = Book::findOrFail($_GET['id']);
+
+        view('books/show', [
+            'heading' => $book['title_en'],
+            'book' => $book
+        ]);
+    }
+
     public function create(): void
     {
         view('books/create', [

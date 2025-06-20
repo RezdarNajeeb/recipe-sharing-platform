@@ -9,12 +9,14 @@
         <ul class="mb-10">
             <?php foreach($books as $book) : ?>
                 <li class="list-disc">
-                    <?= $book['title_en'] ?>
+                    <a href="/book?id=<?=$book['id']?>" class="hover:text-blue-500 hover:underline">
+                        <?= $book['title_en'] ?>
+                    </a>
                 </li>
             <?php endforeach; ?>
         </ul>
 
-        <a href="/books/create" class="text-blue-500 hover:underline">Add</a>
+        <a href="/books/create" class="text-green-800 hover:underline">Add</a>
     </div>
 </main>
 
