@@ -16,6 +16,8 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(BASE_PATH);
 $dotenv->safeLoad();
 
+require basePath('bootstrap.php');
+
 $url = parse_url($_SERVER['REQUEST_URI'])['path'];
 $method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 

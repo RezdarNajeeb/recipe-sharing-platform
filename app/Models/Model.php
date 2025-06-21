@@ -2,22 +2,25 @@
 
 namespace App\Models;
 
+use Core\App;
 use Core\Database;
+use PDO;
 use PDOStatement;
 
 class Model
 {
     private static bool|PDOStatement $statement;
     protected static string $table;
+    protected static PDO $db;
 
     public function __construct()
     {
-        //
+        self::$db = App::resolve(Database::class);
     }
 
     public static function query(string $query, array $params = []): bool
     {
-        static::$statement = new Database()::$pdo->prepare($query);
+        static::$statement = new static()::$db->prepare($query);
 
         return static::$statement->execute($params);
     }
