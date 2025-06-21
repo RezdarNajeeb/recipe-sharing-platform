@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\Controller;
 
@@ -12,3 +13,5 @@ $router->get('/books/edit', [BookController::class => 'edit']);
 $router->put('/books', [BookController::class => 'update']);
 $router->delete('/books', [BookController::class => 'destroy']);
 $router->get("/book", [BookController::class => 'show']);
+
+$router->get('/register', [AuthController::class => 'register']);

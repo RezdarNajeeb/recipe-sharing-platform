@@ -1,7 +1,6 @@
 <?php
     require basePath('resources/views/partials/header.view.php');
     require basePath('resources/views/partials/nav.view.php');
-    require basePath('resources/views/partials/banner.view.php');
 ?>
 
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
