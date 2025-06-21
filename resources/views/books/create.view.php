@@ -15,9 +15,9 @@
                             <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
                                 <input type="text" name="title_en" id="title_en" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Birds" />
                             </div>
-                            <?php if (\Core\Session::has('errors')) : ?>
+                            <?php if (errors('title_en')) : ?>
                                 <p class="text-red-500 text-xs mt-2">
-                                    <?= \Core\Session::get('errors')['title_en'] ?? null?>
+                                    <?= errors('title_en') ?>
                                 </p>
                             <?php endif; ?>
                         </div>
@@ -27,9 +27,9 @@
                             <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
                                 <input type="text" name="title_ckb" id="title_ckb" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="چۆلەکەکان" />
                             </div>
-                            <?php if (\Core\Session::has('errors')) : ?>
+                            <?php if (errors('title_ckb')) : ?>
                                 <p class="text-red-500 text-xs mt-2">
-                                    <?= \Core\Session::get('errors')['title_ckb'] ?? null?>
+                                    <?= errors('title_ckb') ?>
                                 </p>
                             <?php endif; ?>
                         </div>
@@ -39,9 +39,9 @@
                         <label for="description_en" class="block text-sm/6 font-medium text-gray-900">Description (EN)</label>
                         <div class="my-2">
                             <textarea name="description_en" id="description_en" rows="3" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"></textarea>
-                            <?php if (\Core\Session::has('errors')) : ?>
+                            <?php if (errors('description_en')) : ?>
                                 <p class="text-red-500 text-xs mt-2">
-                                    <?= \Core\Session::get('errors')['description_en'] ?? null?>
+                                    <?= errors('description_en') ?>
                                 </p>
                             <?php endif; ?>
                         </div>
@@ -49,9 +49,9 @@
                         <label for="description_ckb" class="block text-sm/6 font-medium text-gray-900">Description (CKB)</label>
                         <div class="my-2">
                             <textarea name="description_ckb" id="description_ckb" rows="3" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"></textarea>
-                            <?php if (\Core\Session::has('errors')) : ?>
+                            <?php if (errors('description_ckb')) : ?>
                                 <p class="text-red-500 text-xs mt-2">
-                                    <?= \Core\Session::get('errors')['description_ckb'] ?? null?>
+                                    <?= errors('description_ckb') ?>
                                 </p>
                             <?php endif; ?>
                         </div>

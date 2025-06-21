@@ -45,5 +45,10 @@ function redirect(string $path): void
 
 function old(string $field, string $default = ''): string
 {
-    return Session::get('old', true)[$field] ?? $default;
+    return Session::get('old')[$field] ?? $default;
+}
+
+function errors(string $field): bool|string
+{
+    return Session::get('errors')[$field] ?? false;
 }
