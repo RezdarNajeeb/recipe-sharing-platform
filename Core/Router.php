@@ -53,7 +53,7 @@ class Router
         abort();
     }
 
-    public function previousUrl()
+    public static function previousUrl()
     {
         return $_SERVER['HTTP_REFERER'];
     }

@@ -48,7 +48,12 @@ function old(string $field, string $default = ''): string
     return Session::get('old')[$field] ?? $default;
 }
 
-function errors(string $field): bool|string
+function errors(string $field): false|string
 {
-    return Session::get('errors')[$field] ?? false;
+    return Session::get('errors')[$field][0] ?? false;
+}
+
+function user(string $field): string|null
+{
+    return Session::get('user')[$field];
 }

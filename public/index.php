@@ -31,7 +31,7 @@ try {
     Session::flash('errors', $exception->errors);
     Session::flash('old', $exception->old);
 
-    redirect($router->previousUrl());
+    redirect(Router::previousUrl());
 }
 
 Session::unFlashAll();

@@ -15,3 +15,4 @@ $router->delete('/books', [BookController::class => 'destroy']);
 $router->get("/book", [BookController::class => 'show']);
 
 $router->get('/register', [AuthController::class => 'register']);
+$router->post('/register', [AuthController::class => 'store']);
