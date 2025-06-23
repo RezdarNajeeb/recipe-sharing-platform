@@ -36,22 +36,49 @@ class Router
             'url' => $url,
             'controller' => $controller,
             'method' => $method,
-            'middleware' => null
+            'middleware' => []
         ];
 
         return $this;
     }
 
+    private function addToMiddlewares(array $middlewares, ?int $urlIndex = null): void
+    {
+        array_push($this->routes[$urlIndex ?? array_key_last($this->routes)]['middleware'], ...$middlewares);
+    }
+
     public function guest(): self
     {
-        $this->routes[array_key_last($this->routes)]['middleware'] = 'guest';
+        $this->addToMiddlewares(['guest']);
 
         return $this;
     }
 
     public function auth(): self
     {
-        $this->routes[array_key_last($this->routes)]['middleware'] = 'auth';
+        $this->addToMiddlewares(['auth']);
+
+        return $this;
+    }
+
+    public function middleware(array $keys): self
+    {
+        $this->addToMiddlewares($keys);
+
+        return $this;
+    }
+
+    public function group(array $options, callable $function): self
+    {
+        $beforeCount = count($this->routes);
+
+        call_user_func($function);
+
+        if (array_key_exists('middleware', $options)) {
+            for ($i = $beforeCount; $i <= array_key_last($this->routes); $i++) {
+                $this->addToMiddlewares($options['middleware'], $i);
+            }
+        }
 
         return $this;
     }
@@ -72,7 +99,7 @@ class Router
         abort();
     }
 
-    public static function previousUrl()
+    public function previousUrl()
     {
         return $_SERVER['HTTP_REFERER'];
     }

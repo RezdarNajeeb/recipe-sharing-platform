@@ -11,18 +11,22 @@ class Middleware
         'auth' => Auth::class
     ];
 
-    public static function resolve(?string $key): void
+    public static function resolve(?array $keys): void
     {
-        if (!$key) {
+        if (!$keys) {
             return;
         }
 
-        $middleware = self::MAP[$key] ?? false;
+        // Our keys are number indexed array, and we want to take the values as keys so we need to flip it, then through
+        // array_intersect_key we find the ones that requested, and we take them out from our MAP.
+        $middlewares = array_intersect_key(self::MAP, array_flip($keys));
 
-        if (!$middleware) {
-            throw new Exception("There is not any middleware with the key: '$key'");
+        if (!$middlewares) {
+            throw new Exception("There is not any middleware with the keys: " . implode(', ', $keys));
         }
 
-        new $middleware()->handle();
+        foreach ($middlewares as $middleware) {
+            new $middleware()->handle();
+        }
     }
 }

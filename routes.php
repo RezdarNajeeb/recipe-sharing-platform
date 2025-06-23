@@ -14,8 +14,11 @@ $router->put('/books', [BookController::class => 'update']);
 $router->delete('/books', [BookController::class => 'destroy']);
 $router->get("/book", [BookController::class => 'show']);
 
-$router->get('/register', [AuthController::class => 'register'])->guest();
-$router->post('/register', [AuthController::class => 'store'])->guest();
+$router->group(['middleware' => ['guest']], function () use ($router) {
+    $router->get('/register', [AuthController::class => 'register']);
+    $router->post('/register', [AuthController::class => 'store']);
+    $router->get('/login', [AuthController::class => 'login']);
+    $router->post('/login', [AuthController::class => 'authenticate']);
+});
+
 $router->delete('/logout', [AuthController::class => 'logout'])->auth();
-$router->get('/login', [AuthController::class => 'login'])->guest();
-$router->post('/login', [AuthController::class => 'authenticate'])->guest();
