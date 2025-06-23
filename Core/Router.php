@@ -2,6 +2,9 @@
 
 namespace Core;
 
+use Core\Middleware\Auth;
+use Core\Middleware\Guest;
+
 class Router
 {
     public array $routes = [];
@@ -60,15 +63,11 @@ class Router
             if ($route['url'] === $url && $route['method'] === strtoupper($method)) {
                 if ($route['middleware']) {
                     if ($route['middleware'] === 'guest') {
-                        if (Session::has('user')) {
-                            redirect('/');
-                        }
+                        new Guest()->handle();
                     }
 
                     if ($route['middleware'] === 'auth') {
-                        if (!Session::has('user')) {
-                            redirect('/');
-                        }
+                        new Auth()->handle();
                     }
                 }
 
