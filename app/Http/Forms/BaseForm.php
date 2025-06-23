@@ -2,13 +2,13 @@
 
 namespace App\Http\Forms;
 
-use Core\ValidationException;
+use Core\ExceptionHandler;
 use Core\Validator;
 
 class BaseForm
 {
     protected array $errors;
-    public function __construct(protected array $fields)
+    public function __construct(public array $fields)
     {
         $this->errors = [];
 
@@ -19,11 +19,11 @@ class BaseForm
         }
     }
 
-    public static function validate(array $fields): ValidationException|array
+    public static function validate(array $fields): ExceptionHandler|static
     {
         $instance = new static($fields);
 
-        return $instance->isFailed() ? $instance->throw() : $fields;
+        return $instance->isFailed() ? $instance->throw() : $instance;
     }
 
     protected function isFailed(): bool
@@ -31,9 +31,9 @@ class BaseForm
         return !empty($this->errors);
     }
 
-    public function throw(): ValidationException
+    public function throw(): ExceptionHandler
     {
-        return ValidationException::throw($this->errors, $this->fields);
+        return ExceptionHandler::throw($this->errors, $this->fields);
     }
 
     public function errors(): array

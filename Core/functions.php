@@ -53,7 +53,18 @@ function errors(string $field): false|string
     return Session::get('errors')[$field][0] ?? false;
 }
 
-function user(string $field): string|null
+function user(string $field, ?string $default): string
 {
-    return Session::get('user')[$field];
+    $value = Session::get('user', $default);
+
+    if (is_array($value)) {
+        $value = $value[$field];
+    }
+
+    return $value;
+}
+
+function isAuth(): bool
+{
+    return (bool) Session::get('user');
 }

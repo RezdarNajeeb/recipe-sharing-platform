@@ -8,9 +8,9 @@ require BASE_PATH.'vendor/autoload.php';
 
 require BASE_PATH.'Core/functions.php';
 
+use Core\ExceptionHandler;
 use Core\Router;
 use Core\Session;
-use Core\ValidationException;
 use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable(BASE_PATH);
@@ -27,9 +27,9 @@ require basePath('routes.php');
 
 try {
     $router->route($url, $method);
-} catch (ValidationException $exception) {
-    Session::flash('errors', $exception->errors);
-    Session::flash('old', $exception->old);
+} catch (ExceptionHandler $e) {
+    Session::flash('errors', $e->errors);
+    Session::flash('old', $e->old);
 
     redirect(Router::previousUrl());
 }

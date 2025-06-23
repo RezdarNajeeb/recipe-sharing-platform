@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Forms\BookForm;
 use App\Models\Book;
-use Core\Validator;
-use Exception;
 
 class BookController
 {
@@ -36,14 +34,14 @@ class BookController
 
     public function store(): void
     {
-        $fields = BookForm::validate([
+        $form = BookForm::validate([
             'title_en' => $_POST['title_en'],
             'title_ckb' => $_POST['title_ckb'],
             'description_en' => $_POST['description_en'],
             'description_ckb' => $_POST['description_ckb'],
         ]);
 
-        if (Book::create($fields)) {
+        if (Book::create($form->fields)) {
             redirect('/books');
         }
 
@@ -64,7 +62,7 @@ class BookController
     {
         $id = $_POST['id'];
 
-        $fields = BookForm::validate([
+        $form = BookForm::validate([
             'title_en' => $_POST['title_en'],
             'title_ckb' => $_POST['title_ckb'],
             'description_en' => $_POST['description_en'],
@@ -73,7 +71,7 @@ class BookController
 
         $book = Book::findOrFail($id);
 
-        if ($book->update($fields)) {
+        if ($book->update($form->fields)) {
             header("location: /book?id=$id");
             exit();
         }

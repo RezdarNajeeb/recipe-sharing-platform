@@ -4,12 +4,12 @@ namespace Core;
 
 use Exception;
 
-class ValidationException extends Exception
+class ExceptionHandler extends Exception
 {
     public array $errors;
     public array $old;
 
-    public static function throw($errors, $old): ValidationException
+    public static function throw($errors, $old): ExceptionHandler
     {
         $instance = new static();
 

@@ -16,3 +16,6 @@ $router->get("/book", [BookController::class => 'show']);
 
 $router->get('/register', [AuthController::class => 'register']);
 $router->post('/register', [AuthController::class => 'store']);
+$router->delete('/logout', [AuthController::class => 'logout']);
+$router->get('/login', [AuthController::class => 'login']);
+$router->post('/login', [AuthController::class => 'authenticate']);

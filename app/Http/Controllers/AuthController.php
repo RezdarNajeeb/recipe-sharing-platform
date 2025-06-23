@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Forms\LoginForm;
 use App\Http\Forms\RegisterForm;
 use App\Models\User;
+use Core\Authenticator;
 use Core\Router;
 use Core\Session;
 
@@ -14,14 +16,14 @@ class AuthController
         view('auth/register');
     }
 
-    public function store()
+    public function store(): void
     {
-        if (!User::create(RegisterForm::validate($_REQUEST))) {
-            Session::flash('errors', [
-                'email' => 'Unknown error occurred, please try again'
-            ]);
+        $form = RegisterForm::validate($_REQUEST);
 
-            redirect(Router::previousUrl());
+        $form->fields['password'] = password_hash($form->fields['password'], PASSWORD_BCRYPT);
+
+        if (!User::create($form->fields)) {
+            $form->error('email', 'Unknown error occurred, please try again')->throw();
         }
 
         Session::put('user', [
@@ -29,6 +31,29 @@ class AuthController
             'email' => $_REQUEST['email'],
             'role' => 'user'
         ]);
+
+        redirect('/');
+    }
+
+    public function logout(): void
+    {
+        Authenticator::logout();
+
+        redirect('/login');
+    }
+
+    public function login(): void
+    {
+        view('auth/login');
+    }
+
+    public function authenticate(): void
+    {
+        $form = LoginForm::validate($_REQUEST);
+
+        if (!Authenticator::attempt($form->fields['email'], $form->fields['password'])) {
+            $form->error('email', 'Invalid Credentials')->throw();
+        }
 
         redirect('/');
     }

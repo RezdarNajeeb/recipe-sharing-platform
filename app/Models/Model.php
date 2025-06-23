@@ -33,9 +33,7 @@ class Model
 
     public static function find(int $id): mixed
     {
-        static::query("SELECT * FROM " . static::$table . " WHERE id=:id", [
-            'id' => $id
-        ]);
+        static::where('id', $id);
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             return static::$statement->fetch();
@@ -53,6 +51,18 @@ class Model
         }
 
         return $result;
+    }
+
+    public static function where(string $column, string $value, string $operator = '='): static
+    {
+        static::query("SELECT * FROM " . static::$table . " WHERE $column $operator ?", [$value]);
+
+        return new static();
+    }
+
+    public function get(): mixed
+    {
+        return static::$statement->fetch();
     }
 
     public static function create(array $fields): bool
