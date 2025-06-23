@@ -4,7 +4,7 @@ namespace Core\Middleware;
 
 use Core\Session;
 
-class Guest
+class Guest implements MiddlewareContract
 {
     public function handle(): void
     {

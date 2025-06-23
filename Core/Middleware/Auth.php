@@ -4,7 +4,7 @@ namespace Core\Middleware;
 
 use Core\Session;
 
-class Auth
+class Auth implements MiddlewareContract
 {
     public function handle(): void
     {
