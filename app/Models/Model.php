@@ -25,10 +25,84 @@ class Model
         return static::$statement->execute($params);
     }
 
-    public static function all(): array
+    public static function all(?array $relations): array
     {
-        static::query("SELECT * FROM ".static::$table);
-        return static::$statement->fetchAll();
+        $table = static::getTableName();
+
+        $selectFields = [];
+        $joins = [];
+        $relationTables = [];
+
+        // Get columns of the base table
+        static::query("SHOW COLUMNS FROM $table");
+        $baseColumns = array_column(static::$statement->fetchAll(PDO::FETCH_ASSOC), 'Field');
+
+        // Add base table fields with aliases
+        foreach ($baseColumns as $col) {
+            $selectFields[] = "$table.$col AS {$table}__$col";
+        }
+
+        // Add relation fields
+        if (!empty($relations)) {
+            foreach ($relations as $relation) {
+                if (str_ends_with($relation, 'y')) {
+                    $relationTable = str_replace('y', 'ies', $relation);
+                } else {
+                    $relationTable = $relation.'s';
+                }
+
+                $relationTables[$relation] = $relationTable;
+
+                $joins[] = "LEFT JOIN $relationTable ON $table.{$relation}_id = $relationTable.id";
+
+                // Get columns of the related table
+                static::query("SHOW COLUMNS FROM $relationTable");
+                $columns = static::$statement->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach ($columns as $col) {
+                    $colName = $col['Field'];
+                    $selectFields[] = "$relationTable.$colName AS {$relation}__$colName";
+                }
+            }
+        }
+
+        $selectClause = implode(', ', $selectFields);
+        $joinClause = implode(' ', $joins);
+
+        $query = "SELECT $selectClause FROM $table $joinClause";
+        static::query($query);
+        $rows = static::$statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $result = [];
+
+        foreach ($rows as $row) {
+            $entry = [];
+            $relationsData = [];
+
+            foreach ($row as $key => $value) {
+                if (str_starts_with($key, $table . '__')) {
+                    $field = substr($key, strlen($table . '__'));
+                    $entry[$field] = $value;
+                } else {
+                    foreach ($relationTables as $relation => $relationTable) {
+                        if (str_starts_with($key, $relation . '__')) {
+                            $field = substr($key, strlen($relation . '__'));
+                            $relationsData[$relation][$field] = $value;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Attach nested relations
+            foreach ($relationsData as $relation => $data) {
+                $entry[$relation] = $data;
+            }
+
+            $result[] = $entry;
+        }
+
+        return $result;
     }
 
     public static function find(int $id): mixed
@@ -55,9 +129,25 @@ class Model
 
     public static function where(string $column, string $value, string $operator = '='): static
     {
-        static::query("SELECT * FROM " . static::$table . " WHERE $column $operator ?", [$value]);
+        static::query("SELECT * FROM " . static::getTableName() . " WHERE $column $operator ?", [$value]);
 
         return new static();
+    }
+
+    public static function getTableName(): string
+    {
+        return
+            static::$table
+            ??
+            strtolower(
+                substr(
+                    static::class,
+                    strripos(
+                        static::class,
+                        '\\'
+                    ) + 1
+                )
+            ).'s';
     }
 
     public function get(): mixed
@@ -70,7 +160,7 @@ class Model
         $columns = self::getColumns($fields);
         $wilds = self::getWilds();
 
-        return static::query("INSERT INTO " . static::$table . " ($columns) VALUES($wilds)", array_values($fields));
+        return static::query("INSERT INTO " . static::getTableName() . " ($columns) VALUES($wilds)", array_values($fields));
     }
 
     public function update(array $fields): bool
@@ -80,12 +170,12 @@ class Model
 
         $fields['id'] = $_POST['id'];
 
-        return static::query("UPDATE " . static::$table . " SET $columns=? WHERE id=?", array_values($fields));
+        return static::query("UPDATE " . static::getTableName() . " SET $columns=? WHERE id=?", array_values($fields));
     }
 
     public function destroy(): bool
     {
-        return static::query("DELETE FROM " . static::$table . " WHERE id=?", [$_POST['id']]);
+        return static::query("DELETE FROM " . static::getTableName() . " WHERE id=?", [$_POST['id']]);
     }
 
     private static function getColumns(array $fields): string

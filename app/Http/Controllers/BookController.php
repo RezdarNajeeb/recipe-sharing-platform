@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Forms\BookForm;
+use App\Models\Author;
 use App\Models\Book;
 
 class BookController
 {
     public function index(): void
     {
+        $books = Book::all(['author', 'category']);
+
         view('books/index', [
             'heading' => 'Books',
-            'books' => Book::all()
+            'books' => $books
         ]);
     }
 
