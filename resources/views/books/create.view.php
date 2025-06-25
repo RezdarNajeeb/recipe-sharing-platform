@@ -6,7 +6,7 @@
 
 <main>
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <form action="/books" method="POST">
+        <form action="/books" method="POST" enctype="multipart/form-data">
             <div class="space-y-12">
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div class="sm:col-span-4">
@@ -52,6 +52,50 @@
                             <?php if (errors('description_ckb')) : ?>
                                 <p class="text-red-500 text-xs mt-2">
                                     <?= errors('description_ckb') ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-4">
+                        <label for="language" class="block text-sm/6 font-medium text-gray-900">Language</label>
+                        <div class="my-2">
+                            <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <select name="language" id="language">
+                                    <option value="en">English</option>
+                                    <option value="ckb">کوردی سۆرانی</option>
+                                    <option value="ar">العربية</option>
+                                </select>
+                            </div>
+                            <?php if (errors('language')) : ?>
+                                <p class="text-red-500 text-xs mt-2">
+                                    <?= errors('language') ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-4">
+                        <label for="image" class="block text-sm/6 font-medium text-gray-900">Image</label>
+                        <div class="my-2">
+                            <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <input type="file" name="image" id="image" accept="image/*" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"/>
+                            </div>
+                            <?php if (errors('image')) : ?>
+                                <p class="text-red-500 text-xs mt-2">
+                                    <?= errors('image') ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+
+                        <label for="file" class="block text-sm/6 font-medium text-gray-900">PDF File</label>
+                        <div class="mt-2">
+                            <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <input type="file" name="file" id="file" accept="application/pdf" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
+                            </div>
+                            <?php if (errors('file')) : ?>
+                                <p class="text-red-500 text-xs mt-2">
+                                    <?= errors('file') ?>
                                 </p>
                             <?php endif; ?>
                         </div>

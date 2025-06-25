@@ -7,8 +7,6 @@
 <main>
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
 
-
-
         <a href="/books/create" class="text-green-800 hover:underline">Add</a>
 
         <div class="bg-white">
@@ -16,7 +14,7 @@
                 <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
                     <?php foreach($books as $book) : ?>
                         <div class="group relative">
-                            <img src="<?= $book['image'] ?>" alt="<?= $book['title_en'] ?>" class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80" />
+                            <img src="<?= image($book['image']) ?>" alt="<?= $book['title_en'] ?>" class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80" />
                             <div class="mt-4 flex justify-between">
                                 <div>
                                     <h3 class="text-sm text-gray-700">

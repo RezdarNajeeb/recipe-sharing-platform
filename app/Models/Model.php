@@ -136,18 +136,7 @@ class Model
 
     public static function getTableName(): string
     {
-        return
-            static::$table
-            ??
-            strtolower(
-                substr(
-                    static::class,
-                    strripos(
-                        static::class,
-                        '\\'
-                    ) + 1
-                )
-            ).'s';
+        return static::$table ?? strtolower(basename(static::class)).'s';
     }
 
     public function get(): mixed
@@ -158,7 +147,7 @@ class Model
     public static function create(array $fields): bool
     {
         $columns = self::getColumns($fields);
-        $wilds = self::getWilds();
+        $wilds = self::getWilds($fields);
 
         return static::query("INSERT INTO " . static::getTableName() . " ($columns) VALUES($wilds)", array_values($fields));
     }
@@ -183,8 +172,8 @@ class Model
         return implode(',', array_keys($fields));
     }
 
-    private static function getWilds(): string
+    private static function getWilds(array $fields): string
     {
-        return substr(str_repeat('?,', count($_REQUEST)), 0, (count($_REQUEST) * 2) - 1);
+        return substr(str_repeat('?,', count($fields)), 0, (count($fields) * 2) - 1);
     }
 }

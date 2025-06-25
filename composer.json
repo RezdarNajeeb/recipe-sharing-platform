@@ -9,7 +9,8 @@
     "require": {
         "vlucas/phpdotenv": "^5.6",
         "ext-pdo": "*",
-        "illuminate/collections": "^12.19"
+        "illuminate/collections": "^12.19",
+        "ext-fileinfo": "*"
     },
     "autoload": {
         "psr-4": {

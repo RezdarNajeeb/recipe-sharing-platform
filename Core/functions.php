@@ -68,3 +68,8 @@ function isAuth(): bool
 {
     return (bool) Session::get('user');
 }
+
+function image(string $path): string
+{
+    return "/image/" . urlencode($path);
+}
