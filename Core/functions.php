@@ -73,3 +73,8 @@ function image(string $path): string
 {
     return !empty($path) ? "/image/" . urlencode($path) : "/image/cover_placeholder.jpg";
 }
+
+function pdf(string $path): string
+{
+    return "/file/" . urlencode($path);
+}

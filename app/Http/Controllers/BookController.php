@@ -16,6 +16,7 @@ class BookController
 
         view('books/index', [
             'heading' => 'Books',
+            'btn' => 'Add',
             'books' => $books
         ]);
     }
@@ -23,6 +24,11 @@ class BookController
     public function show(): void
     {
         $book = Book::findOrFail($_GET['id']);
+        $bookAuthor = Author::where('id', $book['author_id'])->get();
+        $bookCategory = Category::where('id', $book['category_id'])->get();
+
+        $book['author'] = $bookAuthor;
+        $book['category'] = $bookCategory;
 
         view('books/show', [
             'heading' => $book['title_en'],

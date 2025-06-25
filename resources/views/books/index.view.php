@@ -6,9 +6,6 @@
 
 <main>
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-
-        <a href="/books/create" class="text-green-800 hover:underline">Add</a>
-
         <div class="bg-white">
             <div class="mx-auto max-w-2xl px-4 py-16 rounded-md sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
                 <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
