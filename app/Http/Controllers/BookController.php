@@ -43,12 +43,9 @@ class BookController
             'description_en' => $_POST['description_en'],
             'description_ckb' => $_POST['description_ckb'],
             'language' => $_POST['language'],
-            'image' => $_FILES['image']['name'],
-            'file' => $_FILES['file']['name']
+            'image' => LocalStorage::save('images', 'image'),
+            'file' => LocalStorage::save('PDFs', 'file')
         ]);
-
-        LocalStorage::save('images', 'image');
-        LocalStorage::save('PDFs', 'file');
 
         if (Book::create($form->fields)) {
             redirect('/books');

@@ -4,7 +4,7 @@ namespace Core\Storage;
 
 class LocalStorage
 {
-    public static function save(?string $path, string $file): bool
+    public static function save(?string $path, string $file): false|string
     {
         $targetDir = self::getDirPath($path);
 
@@ -12,7 +12,9 @@ class LocalStorage
             return false;
         }
 
-        $targetFile = self::getFilePath($targetDir, $file);
+        $randomName = self::getRandomName(self::getFileName($file));
+
+        $targetFile = self::getFilePath($targetDir, $randomName);
 
         if (!self::isFileAllowed($targetFile, $file)) {
             return false;
@@ -22,7 +24,7 @@ class LocalStorage
             return false;
         }
 
-        return true;
+        return $randomName;
     }
 
     public static function getDirPath(?string $path): string
@@ -42,7 +44,7 @@ class LocalStorage
 
     public static function getFilePath(string $targetDir, string $file): string
     {
-        return $targetDir.self::getFileName($file);
+        return $targetDir.$file;
     }
 
     public static function getFileName(string $file): string
@@ -50,9 +52,9 @@ class LocalStorage
         return basename($_FILES[$file]['name']);
     }
 
-    public static function getRandomName(string $file): void
+    public static function getRandomName(string $file): string
     {
-        //
+        return time().'_'.bin2hex(random_bytes(6)).".".self::getFileType($file);
     }
 
     public static function isFileAllowed(string $targetFile, string $file): bool
