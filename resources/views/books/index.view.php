@@ -25,7 +25,10 @@
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-500"><?= $book['author']['name_en'] ?></p>
                                 </div>
-                                <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset"><?= $book['category']['name_en'] ?></span>
+                                <div class="flex flex-col items-end">
+                                    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset"><?= $book['category']['name_en'] ?></span>
+                                    <span class="text-sm text-gray-600">Language: <?= ucfirst($book['language']) ?></span>
+                                </div>
                             </div>
                         </div>
                     <?php endforeach; ?>

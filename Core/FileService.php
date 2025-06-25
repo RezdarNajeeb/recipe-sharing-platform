@@ -10,7 +10,12 @@ class FileService
         if (preg_match('#^/(image|file)/(.+)$#', $url, $matches)) {
             $type = $matches[1]; // image or file
             $fileName = basename($matches[2]);
-            $filePath = urldecode(basePath("storage/{$type}s/$fileName"));
+
+            if ($fileName === 'cover_placeholder.jpg') {
+                $filePath = urldecode(basePath("public/assets/images/$fileName"));
+            } else {
+                $filePath = urldecode(basePath("storage/{$type}s/$fileName"));
+            }
 
             if (file_exists($filePath)) {
                 $mime = mime_content_type($filePath);

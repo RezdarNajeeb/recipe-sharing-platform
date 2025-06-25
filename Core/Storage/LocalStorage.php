@@ -4,88 +4,116 @@ namespace Core\Storage;
 
 class LocalStorage
 {
-    public static function save(?string $path, string $file): false|string
+    public static function save(?string $directory, string $inputName): ?string
     {
-        $targetDir = self::getDirPath($path);
+        $dirPath = self::getDirectoryPath($directory);
 
-        if (!self::makeDir($targetDir)) {
-            return false;
+        if (!self::makeDirectory($dirPath)) {
+            return null;
         }
 
-        $randomName = self::getRandomName(self::getFileName($file));
+        $randomName = self::generateRandomName(self::getOriginalFileName($inputName));
+        $targetPath = self::buildFilePath($dirPath, $randomName);
 
-        $targetFile = self::getFilePath($targetDir, $randomName);
-
-        if (!self::isFileAllowed($targetFile, $file)) {
-            return false;
+        if (!self::isFileAllowed($inputName)) {
+            return null;
         }
 
-        if (!move_uploaded_file(self::getTempFile($file), $targetFile)) {
-            return false;
+        if (!move_uploaded_file(self::getTempPath($inputName), $targetPath)) {
+            return null;
         }
 
         return $randomName;
     }
 
-    public static function getDirPath(?string $path): string
+    public static function update(?string $directory, string $inputName, ?string $existingFile = null): ?string
     {
-        return basePath("storage/$path/");
-    }
+        if (!self::isUploaded($inputName)) {
+            return $existingFile;
+        }
 
-    public static function makeDir(string $targetDir): bool
-    {
-        if (!file_exists($targetDir)) {
-            if (!mkdir($targetDir, 0777, true)) {
-                return false;
+        $newFile = self::save($directory, $inputName);
+
+        if ($newFile && $existingFile) {
+            $existingFilePath = self::getDirectoryPath($directory) . $existingFile;
+            if (file_exists($existingFilePath)) {
+                unlink($existingFilePath);
             }
         }
+
+        return $newFile;
+    }
+
+    public static function delete(string $directory, string $fileName): void
+    {
+        if (!$fileName) return;
+
+        $filePath = self::getDirectoryPath($directory) . $fileName;
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+    }
+
+    public static function isUploaded(string $inputName): bool
+    {
+        return isset($_FILES[$inputName]) && $_FILES[$inputName]['error'] === UPLOAD_ERR_OK;
+    }
+
+    public static function getDirectoryPath(?string $directory): string
+    {
+        return basePath("storage/$directory/");
+    }
+
+    public static function makeDirectory(string $dirPath): bool
+    {
+        return file_exists($dirPath) || mkdir($dirPath, 0777, true);
+    }
+
+    public static function buildFilePath(string $dirPath, string $fileName): string
+    {
+        return $dirPath . $fileName;
+    }
+
+    public static function getOriginalFileName(string $inputName): string
+    {
+        return basename($_FILES[$inputName]['name']);
+    }
+
+    public static function generateRandomName(string $originalName): string
+    {
+        return time() . '_' . bin2hex(random_bytes(6)) . '.' . self::getExtension($originalName);
+    }
+
+    public static function isFileAllowed(string $inputName): bool
+    {
+        if ($_FILES[$inputName]['size'] > 10 * 1024 * 1024) {
+            echo "File is too large.";
+            return false;
+        }
+
+        $mimeType = mime_content_type($_FILES[$inputName]['tmp_name']);
+        $allowedTypes = [
+            'image/jpeg',
+            'image/png',
+            'image/jpg',
+            'application/pdf'
+        ];
+
+        if (!in_array($mimeType, $allowedTypes)) {
+            echo "Only JPG, JPEG, PNG, and PDF files are allowed.";
+            return false;
+        }
+
         return true;
     }
 
-    public static function getFilePath(string $targetDir, string $file): string
+    public static function getExtension(string $fileName): string
     {
-        return $targetDir.$file;
+        return strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
     }
 
-    public static function getFileName(string $file): string
+    public static function getTempPath(string $inputName): mixed
     {
-        return basename($_FILES[$file]['name']);
-    }
-
-    public static function getRandomName(string $file): string
-    {
-        return time().'_'.bin2hex(random_bytes(6)).".".self::getFileType($file);
-    }
-
-    public static function isFileAllowed(string $targetFile, string $file): bool
-    {
-        $isAllowed = true;
-
-        if (file_exists($targetFile)) {
-            echo "Sorry, file already exists";
-            $isAllowed = false;
-        }
-
-        if ($_FILES[$file]['size'] > 10485760) { // 10MB in bytes
-            echo "Sorry, your file is too large.";
-            $isAllowed = false;
-        }
-
-        if (!in_array(self::getFileType($targetFile), ['jpg', 'png', 'jpeg', 'pdf'])) {
-            echo "Sorry, only JPG, JPEG, PNG and pdf files are allowed.";
-            $isAllowed = false;
-        }
-
-        return $isAllowed;
-    }
-
-    public static function getFileType(string $targetFile): string
-    {
-        return strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-    }
-
-    public static function getTempFile(string $file): mixed
-    {
-        return $_FILES[$file]['tmp_name'];
+        return $_FILES[$inputName]['tmp_name'];
     }
 }

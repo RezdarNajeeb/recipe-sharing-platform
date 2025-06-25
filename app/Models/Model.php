@@ -25,7 +25,7 @@ class Model
         return static::$statement->execute($params);
     }
 
-    public static function all(?array $relations): array
+    public static function all(array $relations = []): array
     {
         $table = static::getTableName();
 
@@ -109,11 +109,7 @@ class Model
     {
         static::where('id', $id);
 
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            return static::$statement->fetch();
-        }
-
-        return new static();
+        return static::$statement->fetch();
     }
 
     public static function findOrFail(int $id): mixed
@@ -121,6 +117,7 @@ class Model
         $result = static::find($id);
 
         if (!$result) {
+            http_response_code(404);
             echo "No records found";
         }
 
@@ -136,12 +133,20 @@ class Model
 
     public static function getTableName(): string
     {
-        return static::$table ?? strtolower(basename(static::class)).'s';
+        $modelName = strtolower(basename(static::class));
+
+        return static::$table ?? str_ends_with($modelName, 'y') ? str_replace('y', 'ies', $modelName) : $modelName.'s';
     }
 
-    public function get(): mixed
+    public function get(?string $field = null): mixed
     {
-        return static::$statement->fetch();
+        $result = static::$statement->fetch();
+
+        if ($field === null) {
+            return $result;
+        }
+
+        return $result[$field];
     }
 
     public static function create(array $fields): bool
@@ -152,7 +157,7 @@ class Model
         return static::query("INSERT INTO " . static::getTableName() . " ($columns) VALUES($wilds)", array_values($fields));
     }
 
-    public function update(array $fields): bool
+    public static function update(array $fields): bool
     {
         // col1 = val1, col2 = val2
         $columns = str_replace(',', '=?,', static::getColumns($fields));
@@ -162,7 +167,7 @@ class Model
         return static::query("UPDATE " . static::getTableName() . " SET $columns=? WHERE id=?", array_values($fields));
     }
 
-    public function destroy(): bool
+    public static function delete(): bool
     {
         return static::query("DELETE FROM " . static::getTableName() . " WHERE id=?", [$_POST['id']]);
     }

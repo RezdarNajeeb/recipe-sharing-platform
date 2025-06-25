@@ -6,16 +6,17 @@
 
 <main>
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <form action="/books" method="POST">
-            <input type="hidden" name="_method" value="PUT">
+        <form action="/books" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?= $book['id'] ?>">
+            <input type="hidden" name="_method" value="PUT">
+
             <div class="space-y-12">
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div class="sm:col-span-4">
                         <label for="title_en" class="block text-sm/6 font-medium text-gray-900">Title (EN)</label>
                         <div class="my-2">
                             <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                <input type="text" name="title_en" id="title_en" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" value="<?= old('title_en', $book['title_en']) ?>" placeholder="Birds" />
+                                <input type="text" name="title_en" id="title_en" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Birds" value="<?= old('title_en', $book['title_en']) ?>" />
                             </div>
                             <?php if (errors('title_en')) : ?>
                                 <p class="text-red-500 text-xs mt-2">
@@ -27,7 +28,7 @@
                         <label for="title_ckb" class="block text-sm/6 font-medium text-gray-900">Title (CKB)</label>
                         <div class="mt-2">
                             <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-                                <input type="text" name="title_ckb" id="title_ckb" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" value="<?= old('title_ckb', $book['title_ckb']) ?>" placeholder="چۆلەکەکان" />
+                                <input type="text" name="title_ckb" id="title_ckb" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="چۆلەکەکان" value="<?= old('title_ckb', $book['title_ckb']) ?>" />
                             </div>
                             <?php if (errors('title_ckb')) : ?>
                                 <p class="text-red-500 text-xs mt-2">
@@ -58,6 +59,90 @@
                             <?php endif; ?>
                         </div>
                     </div>
+
+                    <div class="sm:col-span-4">
+                        <label for="language" class="block text-sm/6 font-medium text-gray-900">Language</label>
+                        <div class="my-2">
+                            <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <select name="language" id="language">
+                                    <option value="en" <?= $book['language'] === 'en' ? 'selected' : '' ?>>EN</option>
+                                    <option value="ku" <?= $book['language'] === 'ku' ? 'selected' : '' ?>>KU</option>
+                                    <option value="ar" <?= $book['language'] === 'ar' ? 'selected' : '' ?>>AR</option>
+                                </select>
+                            </div>
+                            <?php if (errors('language')) : ?>
+                                <p class="text-red-500 text-xs mt-2">
+                                    <?= errors('language') ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-4">
+                        <label for="image" class="block text-sm/6 font-medium text-gray-900">Image</label>
+                        <div class="my-2">
+                            <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <input type="file" name="image" id="image" accept="image/*" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"/>
+                            </div>
+                            <?php if (errors('image')) : ?>
+                                <p class="text-red-500 text-xs mt-2">
+                                    <?= errors('image') ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+
+                        <label for="file" class="block text-sm/6 font-medium text-gray-900">PDF File</label>
+                        <div class="mt-2">
+                            <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <input type="file" name="file" id="file" accept="application/pdf" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
+                            </div>
+                            <?php if (errors('file')) : ?>
+                                <p class="text-red-500 text-xs mt-2">
+                                    <?= errors('file') ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-4">
+                        <label for="category" class="block text-sm/6 font-medium text-gray-900">Category</label>
+                        <div class="my-2">
+                            <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <select name="category" id="category">
+                                    <?php foreach ($categories as $category) : ?>
+                                        <option value="<?= $category['id'] ?>" <?= $book['category_id'] === $category['id'] ? 'selected' : '' ?>>
+                                            <?= ucfirst($category['name_en']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php if (errors('category')) : ?>
+                                <p class="text-red-500 text-xs mt-2">
+                                    <?= errors('category') ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-4">
+                        <label for="author" class="block text-sm/6 font-medium text-gray-900">Author</label>
+                        <div class="my-2">
+                            <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <select name="author" id="author">
+                                    <?php foreach ($authors as $author) : ?>
+                                        <option value="<?= $author['id'] ?>" <?= $book['author_id'] === $author['id'] ? 'selected' : '' ?>>
+                                            <?= ucfirst($author['name_en']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php if (errors('author')) : ?>
+                                <p class="text-red-500 text-xs mt-2">
+                                    <?= errors('author') ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -70,5 +155,5 @@
 </main>
 
 <?php
-    require basePath('resources/views/partials/footer.view.php');
+require basePath('resources/views/partials/footer.view.php');
 ?>

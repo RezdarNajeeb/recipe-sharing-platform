@@ -71,5 +71,5 @@ function isAuth(): bool
 
 function image(string $path): string
 {
-    return "/image/" . urlencode($path);
+    return !empty($path) ? "/image/" . urlencode($path) : "/image/cover_placeholder.jpg";
 }

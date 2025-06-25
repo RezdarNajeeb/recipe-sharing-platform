@@ -62,9 +62,9 @@
                         <div class="my-2">
                             <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
                                 <select name="language" id="language">
-                                    <option value="en">English</option>
-                                    <option value="ckb">کوردی سۆرانی</option>
-                                    <option value="ar">العربية</option>
+                                    <option value="en">EN</option>
+                                    <option value="ku">KU</option>
+                                    <option value="ar">AR</option>
                                 </select>
                             </div>
                             <?php if (errors('language')) : ?>
@@ -96,6 +96,46 @@
                             <?php if (errors('file')) : ?>
                                 <p class="text-red-500 text-xs mt-2">
                                     <?= errors('file') ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-4">
+                        <label for="category" class="block text-sm/6 font-medium text-gray-900">Category</label>
+                        <div class="my-2">
+                            <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <select name="category" id="category">
+                                    <?php foreach ($categories as $category) : ?>
+                                        <option value="<?= $category['id'] ?>">
+                                            <?= ucfirst($category['name_en']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php if (errors('category')) : ?>
+                                <p class="text-red-500 text-xs mt-2">
+                                    <?= errors('category') ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-4">
+                        <label for="author" class="block text-sm/6 font-medium text-gray-900">Author</label>
+                        <div class="my-2">
+                            <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                                <select name="author" id="author">
+                                    <?php foreach ($authors as $author) : ?>
+                                        <option value="<?= $author['id'] ?>">
+                                            <?= ucfirst($author['name_en']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php if (errors('author')) : ?>
+                                <p class="text-red-500 text-xs mt-2">
+                                    <?= errors('author') ?>
                                 </p>
                             <?php endif; ?>
                         </div>
