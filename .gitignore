@@ -2,4 +2,5 @@
 resources/css/output.css
 node_modules
 .env
-/vendor/
+vendor/
+storage
